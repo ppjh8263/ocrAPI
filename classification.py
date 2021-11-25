@@ -12,6 +12,7 @@ from src.model import Model
 model = None
 
 CLASSES = ["Metal", "Paper", "Paperpack", "Plastic", "Plasticbag","Styrofoam",]
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 trsf=transforms.Compose(
         [
@@ -45,11 +46,9 @@ def inference(img: Image.Image):
     pred = model(img)
     confidence = torch.max(pred)
     class_idx = torch.argmax(pred)
-
     response = {}
     response["result"] = CLASSES[class_idx]
-    response["confidence"] = confidence
-
+    response["confidence"] = confidence.item()
     return response
 
 
