@@ -6,7 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 # from db_config import session
 # from model import UserTable, User, CityTable, City
 import uvicorn
-from ocr import predict, read_imagefile
+from classification import predict, read_imagefile, inference
 
 app = FastAPI()
 
@@ -15,13 +15,14 @@ def read_root():
     return "Boost Camp AI tech CV7's API"
 
 
-@app.post("/ocr/image")
+@app.post("/classification/image")
 async def predict_api(file: UploadFile = File(...)):
     extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
     if not extension:
         return "Image must be jpg or png format!"
     image = read_imagefile(await file.read())
-    prediction = predict(image)
+    # prediction = predict(image)
+    prediction = inference(image)
 
     return prediction
 
