@@ -3,10 +3,11 @@ from typing import Optional
 from fastapi import FastAPI, UploadFile, File
 from typing import List
 from starlette.middleware.cors import CORSMiddleware
-# from db_config import session
-# from model import UserTable, User, CityTable, City
 import uvicorn
 from classification import predict, read_imagefile, inference
+import base64
+import io
+from PIL import Image
 
 app = FastAPI()
 
@@ -22,13 +23,22 @@ async def predict_api(file: UploadFile = File(...)):
     if not extension:
         return "Image must be jpg or png format!"
     image = read_imagefile(await file.read())
-    # prediction = predict(image)
     prediction = inference(image)
     running_time = time.monotonic() - time_start
     print(f'inference time : {running_time:.2f}s')
 
     return prediction
 
+@app.post("/classification/base64")
+async def predict_api(file: UploadFile = File(...)):
+    time_start = time.monotonic()
+    image = read_imagefile(base64.b64decode(await file.read()))
+
+    prediction = inference(image)
+    running_time = time.monotonic() - time_start
+    print(f'inference time : {running_time:.2f}s')
+
+    return prediction
 
 if __name__ == '__main__':
-    uvicorn.run(app, port=6006, host='0.0.0.0')
+    uvicorn.run('main:app', port=6006, host='0.0.0.0', reload=True,)

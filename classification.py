@@ -83,3 +83,9 @@ def read_imagefile(file) -> Image.Image:
     image = trsf(image)
     image = image.reshape([1, 3, 224, 224])
     return image
+
+
+def trsf_imagefile(img) -> Image.Image:
+    image = trsf(img)
+    image = image.reshape([1, 3, 224, 224])
+    return image
