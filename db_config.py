@@ -1,13 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
- 
-user_name = "*"
-user_pwd = "*"
-db_host = "*"
-db_name = "*"
+from KEYS import DB_USER_NAME, DB_USER_PWD, DB_HOST, DB_NAEM
 
-DATABASE = f'postgresql://{user_name}:{user_pwd}@{db_host}/{db_name}?charset=utf8'
+DATABASE = f'postgresql://{DB_USER_NAME}:{DB_USER_PWD}@{DB_HOST}/{DB_NAEM}?charset=utf8'
 
 
 ENGINE = create_engine(
