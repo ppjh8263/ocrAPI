@@ -8,6 +8,7 @@ from PIL import Image
 import numpy as np
 from torchvision import transforms
 from src.model import Model
+import random
 
 model = None
 
@@ -80,12 +81,15 @@ def predict(image: Image.Image):
 
 def read_imagefile(file) -> Image.Image:
     image = Image.open(BytesIO(file))
+    image.save('test.jpg')
     image = trsf(image)
     image = image.reshape([1, 3, 224, 224])
     return image
 
 
-def trsf_imagefile(img) -> Image.Image:
-    image = trsf(img)
-    image = image.reshape([1, 3, 224, 224])
-    return image
+def get_rand_point(min_xy=100,max_image=1000):
+    rand_x=random.randint(0,max_image-min_xy)
+    rand_y=random.randint(0,max_image-min_xy)
+    rand_w=random.randint(min_xy,max_image-rand_x)
+    rand_h=random.randint(min_xy,max_image-rand_y)
+    return [rand_x,rand_y,rand_w,rand_h]
