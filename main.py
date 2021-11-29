@@ -104,5 +104,26 @@ async def demo_base64(file: UploadFile = File(...)):
 
     return prediction
 
+@app.post("/bbox_demo/nopapago")
+async def demo_base64(file: UploadFile = File(...)):
+    time_start = time.monotonic()
+    image = read_imagefile(base64.b64decode(await file.read()))
+    print("success image upload!!")
+    prediction=[random.randint(0,5)]
+    for idx in range(prediction[0]):
+        prediction.append(
+            {
+                'translation':f"demo trasnslation of bbox{idx}",
+                'point':get_rand_point()}
+            )
+
+    running_time = time.monotonic() - time_start
+    print(datetime.datetime.now())
+    print(f'inference time : {running_time:.2f}s')
+
+    return prediction
+
+
+
 if __name__ == '__main__':
     uvicorn.run('main:app', port=6006, host='0.0.0.0', reload=True,)
